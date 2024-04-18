@@ -17,7 +17,8 @@ rbtree *new_rbtree(void) {
   p->nil->left = NULL;
   p->nil->right = NULL;
   return p;
-}lete_rbtree(rbtree *t) {
+}
+void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
   free(t);
 }
