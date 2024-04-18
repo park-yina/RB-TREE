@@ -4,15 +4,20 @@
 
 rbtree *new_rbtree(void) {
   rbtree *p = (rbtree *)calloc(1, sizeof(rbtree));
+  if (p == NULL) {
+	  return NULL;
+  }
   //rb트리 1개의 사이즈만큼을 초기화해둔다.
   // TODO: initialize struct if needed
   //node에 대한 초기화도 함께 해주어야하지 않을까? 노드는 트리의 각 노드를 의미하니까
-  node_t child = (node_t*)calloc(1, sizeof(node_t));//위에서 rbtree도 1만큼의 크기만 calloc해주었으니 얘도 마찬가지이다.
-  child.color = RBTREE_BLACK;
-  p->nil = child.parent = child;
+  p->root = NULL;
+  p->nil = (node_t*)calloc(1, sizeof(node_t));
+  p->nil->color = RBTREE_BLACK;
+  p->nil->parent = NULL;
+  p->nil->left = NULL;
+  p->nil->right = NULL;
   return p;
-}
-void delete_rbtree(rbtree *t) {
+}lete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
   free(t);
 }
