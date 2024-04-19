@@ -35,7 +35,21 @@ node_t *rbtree_find(const rbtree *t, const key_t key) {
 
 node_t *rbtree_min(const rbtree *t) {
   // TODO: implement find
-  return t->root;
+	//트리에서 작은 경우를 찾으려면 왼쪽으로 뒤져야한다.
+	node_t* b_tree = t->root;
+	if (b_tree == NULL)return NULL;
+	else if (b_tree->left == NULL) {
+		if (b_tree->right != NULL)return b_tree->right;
+		else {
+			return NULL;
+		}
+	}
+	else {
+		while (b_tree->left != t->nil) {
+			b_tree = b_tree->left;
+		}
+	}
+  return b_tree;
 }
 
 node_t *rbtree_max(const rbtree *t) {
