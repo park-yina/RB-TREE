@@ -40,6 +40,24 @@ void LeftRotate(rbtree* t, node_t* x) {
 	y->left = x;
 	x->parent = y;
 }
+void RightRotate(rbtree* t, node_t* y) {
+	node_t* x;
+	x = y->left;//y의 왼쪽자식에 있던 x.
+	y->left = x->right; // x의 왼쪽에 있던 애 즉 y기준의 왼쪽 손자가 x의 오른쪽으로 붙는다.
+	if (x->right != t->nil) {
+		x->right->parent = y;
+	}
+	x->parent = y->parent;
+	if (y->parent == t->nil) {
+		t->rppt = x;
+	}
+	else if (y == y->parent->right)
+		y->parent->right = x;
+	else
+		y->parent->left = x;
+	x->right = y;
+	y->parent = x;
+}
 void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
   free(t);
