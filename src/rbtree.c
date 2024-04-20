@@ -62,6 +62,52 @@ void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
   free(t);
 }
+void* rb_insert_Fixup(rbtree* t, node_t* z) {
+	node_t* y;
+	while (z->parent->color == RBTREE_RED) {
+		// 여기에 노드 z의 부모가 레드인 경우의 조건문을 추가해야 합니다.
+		if (z->parent == z->parent->parent->left) {
+			y = z->parent->parent->right;
+			if (y->color == RBTREE_RED) {
+				z->parent->color = RBTREE_BLACK;
+				y->color = RBTREE_BLACK;
+				z->parent->parent->color = RBTREE_RED;
+				z = z->parent->parent;
+			}
+			else {
+				if (z == z->parent->right) {
+					z = z->parent;
+					LeftRotate(t, z);
+				}
+				z->parent->color = RBTREE_BLACK;
+				z->parent->parent->color = RBTREE_RED;
+				RightRotate(t, z->parent->parent);
+			}
+		}
+		else {
+			//TODO
+			y = z->parent->parent->left;
+			//다시 위에 if문부터 시작 을 해야한다.
+			if (y->color == RBTREE_RED) {
+				z->parent->color = RBTREE_BLACK;
+				y->color = RBTREE_BLACK;
+				z->parent->parent->color = RBTREE_RED;
+				z = z->parent->parent;
+			}
+			else {
+				if (z == z->parent->right) {
+					z = z->parent;
+					RightRotate(t, z);
+				}
+				z->parent->color = RBTREE_BLACK;
+				z->parent->parent->color = RBTREE_RED;
+				LeftRotate(t, z->parent->parent);
+			}
+		}
+	}
+	t->root->color = RBTREE_BLACK;
+
+}
 
 node_t *rbtree_insert(rbtree *t, const key_t key) {
   // TODO: implement insert
