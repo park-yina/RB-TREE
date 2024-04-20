@@ -110,7 +110,30 @@ void rb_insert_Fixup(rbtree* t, node_t* z) {
 }
 
 node_t *rbtree_insert(rbtree *t, const key_t key) {
-  // TODO: implement insert
+
+	node_t* y = t->nil;
+	node_t* x = t->root;
+	while (x != t.nil) {
+		y = x;
+		if (key < x->key) {
+			x = x->left;
+		}
+		else x = x->right;
+	}
+	node_t* z = (node_t*)calloc(1, sizeof(node_t));
+	z->parent = y;
+	if (z == t->nil)
+		t->root = z;
+	else if (z->key < key) {
+		y->left = z;
+	}
+	else
+		y->right = z;
+	z->left = t->nil;
+	z->right = t->nil;
+	z->color = RBTREE_RED;
+	rb_insert_Fixup(t, z);
+  // TODO: implement insert 
   return t->root;
 }
 
