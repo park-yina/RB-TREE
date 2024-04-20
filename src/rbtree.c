@@ -62,7 +62,7 @@ void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
   free(t);
 }
-void* rb_insert_Fixup(rbtree* t, node_t* z) {
+void rb_insert_Fixup(rbtree* t, node_t* z) {
 	node_t* y;
 	while (z->parent->color == RBTREE_RED) {
 		// 여기에 노드 z의 부모가 레드인 경우의 조건문을 추가해야 합니다.
