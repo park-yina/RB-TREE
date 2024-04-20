@@ -18,6 +18,28 @@ rbtree *new_rbtree(void) {
   p->nil->right = NULL;
   return p;
 }
+void LeftRotate(rbtree* t, node_t* x) {
+	node_t* y;
+	y = x->right;
+	// x의 왼쪽 자식은 그대로 
+	// x의 오른쪽 자식은 y의 왼쪽 자식
+	x->right = y->left;
+	if (y->left != t->nil) {
+		y->left->parent = x; // 본인의 할아버지까지 거슬러가는 과정
+	}
+	y->parent = x->parent;
+	if (x->parent == t->nil) {
+		t->root = y; 
+	}
+	else if (x == x->parent->left) {
+		x->parent->left = y;
+	}
+	else {
+		x->parent->right = y;
+	}
+	y->left = x;
+	x->parent = y;
+}
 void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
   free(t);
