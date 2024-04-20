@@ -2,21 +2,26 @@
 
 #include <stdlib.h>
 
-rbtree *new_rbtree(void) {
-  rbtree *p = (rbtree *)calloc(1, sizeof(rbtree));
-  if (p == NULL) {
-	  return NULL;
-  }
-  //rb트리 1개의 사이즈만큼을 초기화해둔다.
-  // TODO: initialize struct if needed
-  //node에 대한 초기화도 함께 해주어야하지 않을까? 노드는 트리의 각 노드를 의미하니까
-  p->root = NULL;
-  p->nil = (node_t*)calloc(1, sizeof(node_t));
-  p->nil->color = RBTREE_BLACK;
-  p->nil->parent = NULL;
-  p->nil->left = NULL;
-  p->nil->right = NULL;
-  return p;
+rbtree* new_rbtree(void) {
+    rbtree* p = (rbtree*)calloc(1, sizeof(rbtree));
+    if (p == NULL) {
+        free(p);
+        return NULL;
+    }
+
+   
+    node_t* nil_node = (node_t*)calloc(1, sizeof(node_t));
+    if (nil_node == NULL) {
+        free(p);
+        return NULL;
+    }
+    nil_node->color = RBTREE_BLACK;
+
+    // root 및 nil 포인터에 동일한 노드
+    p->root = nil_node;
+    p->nil = nil_node;
+
+    return p;
 }
 void LeftRotate(rbtree* t, node_t* x) {
 	node_t* y;
