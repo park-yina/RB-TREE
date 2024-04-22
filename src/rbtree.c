@@ -159,18 +159,56 @@ node_t* rbtree_insert(rbtree* t, const key_t key) {
 
 node_t* rbtree_find(const rbtree* t, const key_t key) {
     // TODO: implement find
-    return t->root;
+    //rb트리는 이진트리의 속성을 그대로 가지고 있기 때문에 왼쪽에 작은 수 오른쪽에 큰수가 위치한다.
+    node_t* target;
+    target = t->root;
+    while (target != t->nil) {
+        if (target->key == key) {
+            return target;
+        }
+        else if (target->key < key) {
+            //타겟이 키보다 작다는건 좀 더 큰 쪽으로 뒤져야한다는 것
+            target = target->right;
+        }
+        else if (target->key > key) {
+            target = target->left;
+        }
+    }
+    return NULL;
 }
 
 node_t* rbtree_min(const rbtree* t) {
     // TODO: implement find
-    return t->root;
+      //트리에서 작은 경우를 찾으려면 왼쪽으로 뒤져야한다.
+    node_t* min_tree = t->root;
+    if (min_tree == NULL)return NULL;
+    else if (min_tree->left == NULL) {
+        if (min_tree->right != NULL)return min_tree->right;
+        else {
+            return NULL;
+        }
+    }
+    else {
+        while (min_tree->left != t->nil) {
+            min_tree = min_tree->left;
+        }
+    }
+    return min_tree;
 }
 
 node_t* rbtree_max(const rbtree* t) {
-    // TODO: implement find
-    return t->root;
+    node_t* max_tree = t->root;
+
+    if (max_tree == NULL) return NULL;
+
+    while (max_tree->right != t->nil) {
+        max_tree = max_tree->right;
+    }
+
+    return max_tree;
 }
+
+
 
 int rbtree_erase(rbtree* t, node_t* p) {
     // TODO: implement erase
