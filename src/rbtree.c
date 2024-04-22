@@ -26,9 +26,58 @@ rbtree* new_rbtree(void) {
 }
 
 void delete_rbtree(rbtree* t) {
-    // TODO: reclaim the tree nodes's memory
+    node_t* cur = t->root;
+    node_t* pre = NULL;
+    node_t* temp = NULL;
+    while (cur != t->nil) {
+        if (pre == cur->parent) {
+            if (cur->left != t->nil) {
+                // 왼쪽으로 이동
+                pre = cur;
+                cur = cur->left;
+            }
+            else if (cur->right != t->nil) {
+                // 오른쪽으로 이동
+                pre = cur;
+                cur = cur->right;
+            }
+            else {
+                // 리프
+                temp = cur;
+                cur = cur->parent;
+                free(temp);
+                if (cur->left == temp) {
+                    cur->left = t->nil;
+                }
+                else {
+                    cur->right = t->nil;
+                }
+            }
+        }
+        else if (pre == cur->left) {
+            if (cur->right != t->nil) {
+                // 오른쪽으로 이동
+                pre = cur;
+                cur = cur->right;
+            }
+            else {
+                // 리프
+                temp = cur;
+                cur = cur->parent;
+                free(temp);
+                cur->right = t->nil;
+            }
+        }
+        else { // pre == cur->right
+            temp = cur;
+            cur = cur->parent;
+            free(temp);
+        }
+    }
+    free(t->nil);
     free(t);
 }
+
 
 void leftRotate(rbtree* t, node_t* x) {
     node_t* y;
@@ -208,6 +257,27 @@ node_t* rbtree_max(const rbtree* t) {
     return max_tree;
 }
 
+void rb_grand(rbtree* t, node_t* n, node_t* p) {
+    if (n->parent == t->nil) {
+        //n의 부모가 nil이라는 것은 n이 루트라는 뜻
+        t->root = p;
+    }
+    else if (n == n->parent->left) {
+        //n이 왼쪽자식이다.
+        n->parent->left = p;
+    }
+    else {
+        n->parent->right = p;
+    }
+    p->parent = n->parent;
+}
+node_t* predecessor(rbtree* t, node_t* n) {
+    node_t* temp = n;
+    while (temp->right != t->nil) {
+        temp = temp->right;
+    }
+    return temp;
+}
 
 int rbtree_erase(rbtree* t, node_t* p) {
     if (t == NULL) {
@@ -300,6 +370,22 @@ void del_fixup(rbtree* t, node_t* x) {
 }
 
 int rbtree_to_array(const rbtree* t, key_t* arr, const size_t n) {
-    // TODO: implement to_array
-    return 0;
+    int idx = 0;
+
+    if (t == NULL || t->root == t->nil || arr == NULL || n == 0)
+        return 0;
+
+    // 중위 순회 하면 순서대로 정렬되어 array만들 떄 도움됨
+    inorderTraversal(t, t->root, arr, &idx, n);
+
+    return idx; 
+}
+int rbtree_to_array(const rbtree* t, key_t* arr, const size_t n) {
+    if (t == NULL || t->root == t->nil || arr == NULL || n == 0)
+        return 0;
+
+    int idx = 0;
+    inorder(t, t->root, arr, &idx, n);
+
+    return idx;
 }
